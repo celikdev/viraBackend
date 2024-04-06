@@ -4,6 +4,7 @@ import { MainRouter } from "./routes/index.js";
 import { connectDB } from "./components/connectDB.js";
 
 import cors from "cors";
+import { calculateWeekNumber } from "./components/calculateWeekNumber.js";
 
 const app = express();
 
