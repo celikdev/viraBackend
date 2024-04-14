@@ -103,7 +103,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getDailyLeader = async (req, res) => {
   try {
-    const today = new Date().getDate() + 1;
+    const today = new Date().getDate();
     const monthNumber = new Date().getMonth() + 1;
 
     const leader = await Day.findOne({
