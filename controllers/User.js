@@ -74,12 +74,12 @@ export const updateUser = async (req, res) => {
   try {
     const day = await Day.findOne({ dayNumber: new Date().getDate() });
     if (!day) return res.status(404).json({ message: "Day not found" });
-    // await User.findOneAndUpdate(
-    //   { _id: userID },
-    //   {
-    //     $inc: { userPoints: userPoints },
-    //   }
-    // );
+    await User.findOneAndUpdate(
+      { _id: userID },
+      {
+        $inc: { userPoints: userPoints },
+      }
+    );
     day.leaderBoard.forEach((user) => {
       if (user._id == userID) {
         user.userPoints += userPoints;
