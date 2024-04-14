@@ -6,6 +6,7 @@ import {
   login,
   getWeeklyLeader,
   getMonthlyLeader,
+  getDailyLeader,
 } from "../controllers/User.js";
 
 import multer from "multer";
@@ -19,6 +20,7 @@ UserRouter.post("/login", login);
 UserRouter.get("/", getAllUsers);
 UserRouter.post("/", upload.single("image"), addUser);
 UserRouter.post("/update/:userID", updateUser);
+UserRouter.get("/daily", getDailyLeader);
 UserRouter.get("/weekly", getWeeklyLeader);
 UserRouter.get("/monthly", getMonthlyLeader);
 

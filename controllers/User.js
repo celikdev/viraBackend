@@ -11,6 +11,7 @@ import {
   updateMetadata,
   uploadBytes,
 } from "firebase/storage";
+import Day from "../models/Daily.model.js";
 
 export const login = async (req, res) => {
   const { phone } = req.body;
@@ -71,21 +72,21 @@ export const updateUser = async (req, res) => {
     return res.status(400).json({ message: "Missing required fields" });
   }
   try {
-    const week = await Week.findOne({ weekNumber: calculateWeekNumber() });
-    if (!week) return res.status(404).json({ message: "Week not found" });
-    await User.findOneAndUpdate(
-      { _id: userID },
-      {
-        $inc: { userPoints: userPoints },
-      }
-    );
-    week.leaderBoard.forEach((user) => {
+    const day = await Day.findOne({ dayNumber: new Date().getDate() });
+    if (!day) return res.status(404).json({ message: "Day not found" });
+    // await User.findOneAndUpdate(
+    //   { _id: userID },
+    //   {
+    //     $inc: { userPoints: userPoints },
+    //   }
+    // );
+    day.leaderBoard.forEach((user) => {
       if (user._id == userID) {
         user.userPoints += userPoints;
       }
     });
-    await week.save();
-    return res.status(200).json(week);
+    await day.save();
+    return res.status(200).json(day);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -95,6 +96,22 @@ export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().sort({ userPoints: -1 });
     return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getDailyLeader = async (req, res) => {
+  try {
+    const today = new Date().getDate() + 1;
+    const monthNumber = new Date().getMonth() + 1;
+
+    const leader = await Day.findOne({
+      dayNumber: today,
+      monthNumber,
+    });
+    if (!leader) return res.status(404).json({ message: "Leader not found" });
+    return res.status(200).json(leader);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
