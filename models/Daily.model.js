@@ -18,7 +18,7 @@ const leaderBoardSchema = new mongoose.Schema({
 const DaySchema = new mongoose.Schema({
   dayNumber: {
     type: Number,
-    default: new Date().getDate(),
+    default: new Date().getDate() + 1,
   },
   monthNumber: {
     type: Number,

@@ -65,6 +65,7 @@ export const addUser = async (req, res) => {
     return res.status(400).json({ message: "Missing required fields" });
 };
 
+// BUG: After updated, change the leaderboard placement
 export const updateUser = async (req, res) => {
   const { userID } = req.params;
   const { userPoints } = req.body;
@@ -85,6 +86,9 @@ export const updateUser = async (req, res) => {
         user.userPoints += userPoints;
       }
     });
+    //Edit the leaderboard
+    day.leaderBoard.sort((a, b) => b.userPoints - a.userPoints);
+
     await day.save();
     return res.status(200).json(day);
   } catch (error) {
