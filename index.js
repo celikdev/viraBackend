@@ -23,6 +23,20 @@ app.use("/api", MainRouter);
 
 connectDB();
 
+// app.get("/total", async (req, res) => {
+//   const totalCount = await Day.findOne({ dayNumber: new Date().getDate() });
+//   console.log(
+//     totalCount.leaderBoard.forEach((day) => {
+//       console.log(day.userPoints);
+//     })
+//   );
+//   var count = 0;
+//   totalCount.leaderBoard.forEach((day) => {
+//     count += day.userPoints;
+//   });
+//   res.json(count.toLocaleString());
+// });
+
 // Daily Job
 cron.schedule("00 00 * * *", async () => {
   const dailyLeader = await User.find().sort({ userPoints: -1 });

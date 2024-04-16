@@ -166,12 +166,15 @@ export const getDailyLeader = async (req, res) => {
     });
 
     const dailyTotal = leader.leaderBoard.reduce((acc, curr) => {
-      console.log({ acc, curr });
       return acc + curr.userPoints;
     }, 0);
 
     if (!leader) return res.status(404).json({ message: "Leader not found" });
-    return res.status(200).json({ leader, total: dailyTotal });
+    return res.status(200).json({
+      //Get Leader Board  points to locale string
+      leader,
+      total: dailyTotal.toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
