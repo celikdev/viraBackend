@@ -8,6 +8,7 @@ import {
   getMonthlyLeader,
   getDailyLeader,
   deleteUser,
+  updateUserImage,
 } from "../controllers/User.js";
 
 import multer from "multer";
@@ -20,6 +21,11 @@ const UserRouter = Router();
 UserRouter.post("/login", login);
 UserRouter.get("/", getAllUsers);
 UserRouter.post("/", upload.single("image"), addUser);
+UserRouter.post(
+  "/update-user-image/:userID",
+  upload.single("image"),
+  updateUserImage
+);
 UserRouter.post("/update/:userID", updateUser);
 UserRouter.delete("/delete/:userID", deleteUser);
 UserRouter.get("/daily", getDailyLeader);

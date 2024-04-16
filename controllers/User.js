@@ -65,7 +65,43 @@ export const addUser = async (req, res) => {
     return res.status(400).json({ message: "Missing required fields" });
 };
 
-// BUG: After updated, change the leaderboard placement
+export const updateUserImage = async (req, res) => {
+  const { userID } = req.params;
+  const storage = getStorage(firebase);
+
+  if (req.file) {
+    const imageRef = ref(storage, "images/" + req.file.originalname, {
+      contentType: req.file.mimetype,
+    });
+
+    await uploadBytes(imageRef, req.file.buffer)
+      .then((snapshot) => {
+        console.log(`File ${req.file.originalname} uploaded successfully!}`);
+      })
+      .catch((error) => {
+        console.log(error, `${req.file.originalname} upload failed!`);
+      });
+
+    await updateMetadata(imageRef, {
+      contentType: req.file.mimetype,
+    });
+
+    await getDownloadURL(imageRef, req.file.originalname)
+      .then(async (url) => {
+        const user = await User.findOneAndUpdate(
+          { _id: userID },
+          {
+            imageURL: url,
+          }
+        );
+        return res.status(201).json(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+};
+
 export const updateUser = async (req, res) => {
   const { userID } = req.params;
   const { userPoints } = req.body;
@@ -130,6 +166,7 @@ export const getDailyLeader = async (req, res) => {
     });
 
     const dailyTotal = leader.leaderBoard.reduce((acc, curr) => {
+      console.log({ acc, curr });
       return acc + curr.userPoints;
     }, 0);
 

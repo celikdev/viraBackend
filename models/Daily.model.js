@@ -20,6 +20,10 @@ const DaySchema = new mongoose.Schema({
     type: Number,
     default: new Date().getDate() + 1,
   },
+  dailyTotal: {
+    type: Number,
+    default: 0,
+  },
   monthNumber: {
     type: Number,
     required: true,
